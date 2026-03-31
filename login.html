@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>LouiTube – Connexion</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0a0f1a;
+      color: #e6f0ff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #0d1326;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 2px solid #1a2a4a;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: #4da6ff;
+      text-shadow: 0 0 10px #4da6ff;
+    }
+
+    nav a {
+      color: #bcd4ff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      color: #4da6ff;
+    }
+
+    /* FORMULAIRES */
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #111a2e;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0d1b33;
+    }
+
+    h2 {
+      color: #4da6ff;
+      text-shadow: 0 0 8px #4da6ff;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: none;
+      background: #0d1326;
+      color: #e6f0ff;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #4da6ff;
+      border: none;
+      border-radius: 6px;
+      color: #0a0f1a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #80c1ff;
+    }
+
+    .message {
+      margin-top: 10px;
+      text-align: center;
+      color: #80c1ff;
+    }
+
+    .logout-btn {
+      margin-top: 20px;
+      background: #ff4d4d;
+      color: white;
+    }
+
+    .logout-btn:hover {
+      background: #ff8080;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">LouiTube</div>
+    <a href="index.html">Accueil</a>
+    <a href="shorts.html">Shorts</a>
+    <a href="chaines.html">Chaînes</a>
+    <a href="abonnements.html">Abonnements</a>
+    <a href="login.html">Compte</a>
+  </nav>
+
+  <div class="container" id="login-zone">
+
+    <h2>Connexion</h2>
+
+    <input id="login-user" type="text" placeholder="Nom d'utilisateur">
+    <input id="login-pass" type="password" placeholder="Mot de passe">
+    <button id="btn-login">Se connecter</button>
+
+    <div class="message" id="login-message"></div>
+
+    <hr style="margin: 25px 0; border-color:#1a2a4a;">
+
+    <h2>Créer un compte</h2>
+
+    <input id="new-user" type="text" placeholder="Nom d'utilisateur">
+    <input id="new-pass" type="password" placeholder="Mot de passe">
+    <button id="btn-create">Créer un compte</button>
+
+    <div class="message" id="create-message"></div>
+
+  </div>
+
+  <div class="container" id="account-zone" style="display:none;">
+    <h2>Compte connecté</h2>
+    <div class="message" id="account-name"></div>
+    <button class="logout-btn" id="btn-logout">Se déconnecter</button>
+  </div>
+
+  <script>
+    /* HASH MOT DE PASSE (simple mais efficace) */
+    function hash(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) {
+        h = Math.imul(31, h) + str.charCodeAt(i) | 0;
+      }
+      return h.toString();
+    }
+
+    /* RÉCUPÉRATION DES COMPTES */
+    let comptes = JSON.parse(localStorage.getItem("louitube_comptes")) || {};
+    let utilisateur = localStorage.getItem("louitube_user");
+
+    const loginZone = document.getElementById("login-zone");
+    const accountZone = document.getElementById("account-zone");
+
+    function majAffichage() {
+      if (utilisateur) {
+        loginZone.style.display = "none";
+        accountZone.style.display = "block";
+        document.getElementById("account-name").textContent =
+          "Connecté en tant que : " + utilisateur;
+      } else {
+        loginZone.style.display = "block";
+        accountZone.style.display = "none";
+      }
+    }
+
+    majAffichage();
+
+    /* CRÉATION DE COMPTE */
+    document.getElementById("btn-create").onclick = () => {
+      const user = document.getElementById("new-user").value.trim();
+      const pass = document.getElementById("new-pass").value;
+
+      if (!user || !pass) {
+        document.getElementById("create-message").textContent =
+          "Remplis tous les champs.";
+        return;
+      }
+
+      if (comptes[user]) {
+        document.getElementById("create-message").textContent =
+          "Ce nom existe déjà.";
+        return;
+      }
+
+      comptes[user] = hash(pass);
+      localStorage.setItem("louitube_comptes", JSON.stringify(comptes));
+
+      document.getElementById("create-message").textContent =
+        "Compte créé avec succès !";
+    };
+
+    /* CONNEXION */
+    document.getElementById("btn-login").onclick = () => {
+      const user = document.getElementById("login-user").value.trim();
+      const pass = document.getElementById("login-pass").value;
+
+      if (!comptes[user]) {
+        document.getElementById("login-message").textContent =
+          "Utilisateur introuvable.";
+        return;
+      }
+
+      if (comptes[user] !== hash(pass)) {
+        document.getElementById("login-message").textContent =
+          "Mot de passe incorrect.";
+        return;
+      }
+
+      utilisateur = user;
+      localStorage.setItem("louitube_user", utilisateur);
+
+      majAffichage();
+    };
+
+    /* DÉCONNEXION */
+    document.getElementById("btn-logout").onclick = () => {
+      localStorage.removeItem("louitube_user");
+      utilisateur = null;
+      majAffichage();
+    };
+  </script>
+
+</body>
+</html>
