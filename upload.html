@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Uploader une vidéo – LouiTube</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0a0f1a;
+      color: #e6f0ff;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      background: #0d1326;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 2px solid #1a2a4a;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: #4da6ff;
+      text-shadow: 0 0 10px #4da6ff;
+    }
+
+    nav a {
+      color: #bcd4ff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      color: #4da6ff;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #111a2e;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0d1b33;
+    }
+
+    h2 {
+      color: #4da6ff;
+      text-shadow: 0 0 8px #4da6ff;
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: none;
+      background: #0d1326;
+      color: #e6f0ff;
+    }
+
+    button {
+      background: #4da6ff;
+      color: #0a0f1a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #80c1ff;
+    }
+
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      color: #80c1ff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">LouiTube</div>
+    <a href="index.html">Accueil</a>
+    <a href="shorts.html">Shorts</a>
+    <a href="chaines.html">Chaînes</a>
+    <a href="abonnements.html">Abonnements</a>
+    <a href="creer.html">Créer</a>
+    <a href="login.html">Compte</a>
+  </nav>
+
+  <div class="container">
+    <h2>Uploader une vidéo</h2>
+
+    <input type="text" id="titre" placeholder="Titre de la vidéo">
+    <input type="file" id="fichier" accept="video/*">
+    <button id="upload-btn">Publier</button>
+
+    <div class="message" id="msg"></div>
+  </div>
+
+  <script>
+    const user = localStorage.getItem("louitube_user");
+    const msg = document.getElementById("msg");
+
+    if (!user) {
+      msg.textContent = "Vous devez être connecté pour uploader une vidéo.";
+      document.getElementById("upload-btn").disabled = true;
+    }
+
+    document.getElementById("upload-btn").onclick = () => {
+      const titre = document.getElementById("titre").value.trim();
+      const fichier = document.getElementById("fichier").files[0];
+
+      if (!titre || !fichier) {
+        msg.textContent = "Remplissez tous les champs.";
+        return;
+      }
+
+      const lecteur = new FileReader();
+      lecteur.onload = () => {
+        let videos = JSON.parse(localStorage.getItem("louitube_videos_" + user)) || [];
+
+        videos.push({
+          titre: titre,
+          data: lecteur.result
+        });
+
+        localStorage.setItem("louitube_videos_" + user, JSON.stringify(videos));
+
+        msg.textContent = "Vidéo publiée avec succès !";
+      };
+
+      lecteur.readAsDataURL(fichier);
+    };
+  </script>
+
+</body>
+</html>
