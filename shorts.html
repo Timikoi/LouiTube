@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>LouiTube – Shorts</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0a0f1a;
+      color: #e6f0ff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #0d1326;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 2px solid #1a2a4a;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: #4da6ff;
+      text-shadow: 0 0 10px #4da6ff;
+    }
+
+    nav a {
+      color: #bcd4ff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      color: #4da6ff;
+    }
+
+    /* TITRE */
+    h2 {
+      margin: 25px 20px 10px;
+      color: #4da6ff;
+      text-shadow: 0 0 8px #4da6ff;
+    }
+
+    /* SHORTS */
+    .shorts-grid {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      padding: 10px 20px 20px;
+    }
+
+    .short-card {
+      background: #111a2e;
+      padding: 10px;
+      border-radius: 12px;
+      width: 180px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px #0d1b33;
+      transition: 0.2s;
+    }
+
+    .short-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #4da6ff;
+    }
+
+    .short-card video {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .short-title {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #cfe2ff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">LouiTube</div>
+    <a href="index.html">Accueil</a>
+    <a href="shorts.html">Shorts</a>
+    <a href="chaines.html">Chaînes</a>
+    <a href="abonnements.html">Abonnements</a>
+  </nav>
+
+  <!-- TITRE -->
+  <h2>Shorts</h2>
+
+  <!-- SHORTS -->
+  <div class="shorts-grid" id="shorts-list"></div>
+
+  <script>
+    const shorts = [
+      { titre: "Mini tuto Xetyiu", url: "shorts/mini-tuto.mp4" },
+      { titre: "Piano rapide", url: "shorts/piano.mp4" },
+      { titre: "Astuce HTML", url: "shorts/html-tip.mp4" }
+    ];
+
+    const container = document.getElementById("shorts-list");
+
+    shorts.forEach(short => {
+      const card = document.createElement("div");
+      card.className = "short-card";
+
+      const video = document.createElement("video");
+      video.src = short.url;
+      video.controls = true;
+
+      const title = document.createElement("div");
+      title.className = "short-title";
+      title.textContent = short.titre;
+
+      card.appendChild(video);
+      card.appendChild(title);
+      container.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>
