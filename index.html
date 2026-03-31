@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>LouiTube</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #111;
+      color: #fff;
+    }
+
+    header {
+      background: #202020;
+      padding: 15px 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 15px;
+      font-size: 24px;
+      color: #ff4444;
+    }
+
+    .video-card {
+      background: #181818;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    .video-title {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .video-desc {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    iframe, video {
+      width: 100%;
+      max-width: 640px;
+      height: 360px;
+      border: none;
+      border-radius: 8px;
+      background: #000;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    LouiTube
+  </header>
+
+  <div class="container" id="video-list"></div>
+
+  <script>
+    // -----------------------------
+    // 1) LISTE DES VIDÉOS
+    // -----------------------------
+    const videos = [
+      {
+        titre: "Présentation de Liomvy",
+        description: "Je présente ma micronation.",
+        type: "youtube",
+        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        chaine: "IyadTV"
+      },
+      {
+        titre: "Musique Xetyiu",
+        description: "Une composition au piano.",
+        type: "local",
+        url: "videos/musique.mp4",
+        chaine: "IyadTV"
+      },
+      {
+        titre: "Tutoriel HTML",
+        description: "J'explique comment faire un site.",
+        type: "youtube",
+        url: "https://www.youtube.com/embed/9bZkp7q19f0",
+        chaine: "CodeSchool"
+      }
+    ];
+
+    // -----------------------------
+    // 2) REGROUPEMENT PAR CHAÎNE
+    // -----------------------------
+    const chaines = {};
+
+    videos.forEach(video => {
+      if (!chaines[video.chaine]) {
+        chaines[video.chaine] = [];
+      }
+      chaines[video.chaine].push(video);
+    });
+
+    // -----------------------------
+    // 3) AFFICHAGE DES CHAÎNES
+    // -----------------------------
+    const container = document.getElementById('video-list');
+
+    for (const nomChaine in chaines) {
+      // Titre de la chaîne
+      const titreChaine = document.createElement('h2');
+      titreChaine.textContent = nomChaine;
+      container.appendChild(titreChaine);
+
+      // Vidéos de la chaîne
+      chaines[nomChaine].forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+
+        const title = document.createElement('div');
+        title.className = 'video-title';
+        title.textContent = video.titre;
+
+        const desc = document.createElement('div');
+        desc.className = 'video-desc';
+        desc.textContent = video.description;
+
+        let player;
+        if (video.type === "youtube") {
+          player = document.createElement('iframe');
+          player.src = video.url;
+          player.allowFullscreen = true;
+        } else {
+          player = document.createElement('video');
+          player.controls = true;
+          const source = document.createElement('source');
+          source.src = video.url;
+          source.type = "video/mp4";
+          player.appendChild(source);
+        }
+
+        card.appendChild(title);
+        card.appendChild(desc);
+        card.appendChild(player);
+        container.appendChild(card);
+      });
+    }
+  </script>
+
+</body>
+</html>
