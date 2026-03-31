@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>LouiTube – Abonnements</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0a0f1a;
+      color: #e6f0ff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #0d1326;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 2px solid #1a2a4a;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: #4da6ff;
+      text-shadow: 0 0 10px #4da6ff;
+    }
+
+    nav a {
+      color: #bcd4ff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      color: #4da6ff;
+    }
+
+    /* TITRE */
+    h2 {
+      margin: 25px 20px 10px;
+      color: #4da6ff;
+      text-shadow: 0 0 8px #4da6ff;
+    }
+
+    /* LISTE DES CHAÎNES */
+    .channel-list {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .channel-card {
+      background: #111a2e;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #0d1b33;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .channel-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 15px #4da6ff;
+    }
+
+    .channel-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #cfe2ff;
+    }
+
+    .empty {
+      text-align: center;
+      margin-top: 40px;
+      color: #9bb8e0;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">LouiTube</div>
+    <a href="index.html">Accueil</a>
+    <a href="shorts.html">Shorts</a>
+    <a href="chaines.html">Chaînes</a>
+    <a href="abonnements.html">Abonnements</a>
+    <a href="login.html">Compte</a>
+  </nav>
+
+  <h2>Vos abonnements</h2>
+
+  <div class="channel-list" id="list"></div>
+  <div class="empty" id="empty" style="display:none;">Vous n’êtes abonné à aucune chaîne.</div>
+
+  <script>
+    /* RÉCUPÉRATION DES ABONNEMENTS */
+    const abonnes = JSON.parse(localStorage.getItem("louitube_abonnements")) || [];
+
+    /* LISTE DES CHAÎNES DISPONIBLES (à étendre plus tard) */
+    const chaines = {
+      "iyadtv": {
+        nom: "IyadTV",
+        page: "chaine.html"
+      }
+      // Tu pourras ajouter d’autres chaînes ici
+    };
+
+    const list = document.getElementById("list");
+    const empty = document.getElementById("empty");
+
+    if (abonnes.length === 0) {
+      empty.style.display = "block";
+    } else {
+      abonnes.forEach(id => {
+        if (chaines[id]) {
+          const card = document.createElement("div");
+          card.className = "channel-card";
+
+          const name = document.createElement("div");
+          name.className = "channel-name";
+          name.textContent = chaines[id].nom;
+
+          card.appendChild(name);
+
+          card.onclick = () => {
+            window.location.href = chaines[id].page;
+          };
+
+          list.appendChild(card);
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
