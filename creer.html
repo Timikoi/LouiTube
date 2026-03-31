@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>LouiTube – Créer du contenu</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0a0f1a;
+      color: #e6f0ff;
+      font-family: Arial, sans-serif;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #0d1326;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 2px solid #1a2a4a;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: #4da6ff;
+      text-shadow: 0 0 10px #4da6ff;
+    }
+
+    nav a {
+      color: #bcd4ff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      color: #4da6ff;
+    }
+
+    /* CONTENU */
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #111a2e;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0d1b33;
+    }
+
+    h2 {
+      color: #4da6ff;
+      text-shadow: 0 0 8px #4da6ff;
+      text-align: center;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      background: #4da6ff;
+      border: none;
+      border-radius: 6px;
+      color: #0a0f1a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #80c1ff;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      color: #9bb8e0;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">LouiTube</div>
+    <a href="index.html">Accueil</a>
+    <a href="shorts.html">Shorts</a>
+    <a href="chaines.html">Chaînes</a>
+    <a href="abonnements.html">Abonnements</a>
+    <a href="creer.html">Créer</a>
+    <a href="login.html">Compte</a>
+  </nav>
+
+  <div class="container" id="zone-create">
+    <h2>Créer du contenu</h2>
+
+    <button class="btn">Uploader une vidéo</button>
+    <button class="btn">Créer un Short</button>
+    <button class="btn">Créer une chaîne</button>
+    <button class="btn">Gérer mes contenus</button>
+
+    <div class="message" id="msg"></div>
+  </div>
+
+  <script>
+    // Vérifier si l'utilisateur est connecté
+    const user = localStorage.getItem("louitube_user");
+
+    if (!user) {
+      document.getElementById("msg").textContent =
+        "Vous devez être connecté pour créer du contenu.";
+    } else {
+      document.getElementById("msg").textContent =
+        "Connecté en tant que : " + user;
+    }
+  </script>
+
+</body>
+</html>
